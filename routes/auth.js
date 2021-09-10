@@ -17,6 +17,14 @@ router.post(
   })
 );
 
+router.post(
+  "/login/ldap",
+  passport.authenticate("ldapauth", { session: false }),
+  function (req, res) {
+    res.json(req.user);
+  }
+);
+
 router.get("/logout", function (req, res, next) {
   req.logout();
   res.redirect("/");

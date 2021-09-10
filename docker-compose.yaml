@@ -1,0 +1,20 @@
+version: "3.1"
+
+services:
+  openldap:
+    image: osixia/openldap
+    ports:
+      - "389:389"
+      - "636:636"
+    restart: unless-stopped
+    volumes:
+      - "./slapd/database:/var/lib/ldap"
+      - "./slapd/config:/etc/ldap/slapd.d"
+
+  phpldapadmin:
+    image: osixia/phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "openldap"
+    ports:
+      - "6443:443"
+    restart: unless-stopped

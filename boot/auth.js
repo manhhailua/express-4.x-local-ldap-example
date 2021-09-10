@@ -1,7 +1,8 @@
-var passport = require("passport");
-var Strategy = require("passport-local");
-var crypto = require("crypto");
-var db = require("../db");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const LdapStrategy = require("passport-ldapauth");
+const crypto = require("crypto");
+const db = require("../db");
 
 module.exports = function () {
   // Configure the local strategy for use by Passport.
@@ -11,7 +12,7 @@ module.exports = function () {
   // that the password is correct and then invoke `cb` with a user object, which
   // will be set at `req.user` in route handlers after authentication.
   passport.use(
-    new Strategy(function (username, password, cb) {
+    new LocalStrategy(function (username, password, cb) {
       db.get(
         "SELECT rowid AS id, * FROM users WHERE username = ?",
         [username],
@@ -43,7 +44,7 @@ module.exports = function () {
                 });
               }
 
-              var user = {
+              const user = {
                 id: row.id.toString(),
                 username: row.username,
                 displayName: row.name,
@@ -53,6 +54,20 @@ module.exports = function () {
           );
         }
       );
+    })
+  );
+
+  // Configure the ldap strategy for use by Passport.
+  //
+  passport.use(
+    new LdapStrategy({
+      server: {
+        url: "ldap://localhost:389",
+        bindDN: "cn=admin,dc=example,dc=org",
+        bindCredentials: "admin",
+        searchBase: "ou=software,dc=example,dc=org",
+        searchFilter: "(uid={{username}})",
+      },
     })
   );
 
