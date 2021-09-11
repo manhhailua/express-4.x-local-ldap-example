@@ -48,6 +48,7 @@ module.exports = function () {
                 id: row.id.toString(),
                 username: row.username,
                 displayName: row.name,
+                strategy: "local",
               };
               return cb(null, user);
             }
@@ -59,16 +60,31 @@ module.exports = function () {
 
   // Configure the ldap strategy for use by Passport.
   //
+  // Refs:
+  // - https://github.com/vesse/passport-ldapauth#express-example
+  // - https://github.com/vesse/node-ldapauth-fork#ldapauth-config-options
   passport.use(
-    new LdapStrategy({
-      server: {
-        url: "ldap://localhost:389",
-        bindDN: "cn=admin,dc=example,dc=org",
-        bindCredentials: "admin",
-        searchBase: "ou=software,dc=example,dc=org",
-        searchFilter: "(uid={{username}})",
+    new LdapStrategy(
+      {
+        server: {
+          url: "ldap://localhost:389",
+          bindDN: "cn=admin,dc=example,dc=org",
+          bindCredentials: "admin",
+          searchBase: "ou=software,dc=example,dc=org",
+          searchFilter: "(uid={{username}})",
+        },
       },
-    })
+      function (user, done) {
+        if (user) {
+          return done(null, {
+            id: user.uid,
+            username: user.uid,
+            displayName: `${user.givenName} ${user.sn}`,
+            strategy: "ldap",
+          });
+        }
+      }
+    )
   );
 
   // Configure Passport authenticated session persistence.
@@ -80,7 +96,12 @@ module.exports = function () {
   // deserializing.
   passport.serializeUser(function (user, cb) {
     process.nextTick(function () {
-      cb(null, { id: user.id, username: user.username });
+      cb(null, {
+        id: user.id,
+        username: user.username,
+        displayName: user.displayName,
+        strategy: user.strategy,
+      });
     });
   });
 

@@ -5,7 +5,11 @@ var db = require("../db");
 var router = express.Router();
 
 /* GET users listing. */
-router.get("/", ensureLoggedIn(), function (req, res, next) {
+router.get("/", ensureLoggedIn("/login/ldap"), function (req, res, next) {
+  if (req.user.strategy === "ldap") {
+    return res.render("profile", { user: req.user });
+  }
+
   db.get(
     "SELECT rowid AS id, username, name FROM users WHERE rowid = ?",
     [req.user.id],
@@ -16,12 +20,13 @@ router.get("/", ensureLoggedIn(), function (req, res, next) {
 
       // TODO: Handle undefined row.
 
-      var user = {
-        id: row.id.toString(),
-        username: row.username,
-        displayName: row.name,
-      };
-      res.render("profile", { user: user });
+      res.render("profile", {
+        user: {
+          id: row.id.toString(),
+          username: row.username,
+          displayName: row.name,
+        },
+      });
     }
   );
 });

@@ -11,18 +11,23 @@ router.get("/login", function (req, res, next) {
 router.post(
   "/login/password",
   passport.authenticate("local", {
-    successRedirect: "/",
+    successRedirect: "/myaccount",
     failureRedirect: "/login",
     failureMessage: true,
   })
 );
 
+router.get("/login/ldap", function (req, res, next) {
+  res.render("login-ldap");
+});
+
 router.post(
   "/login/ldap",
-  passport.authenticate("ldapauth", { session: false }),
-  function (req, res) {
-    res.json(req.user);
-  }
+  passport.authenticate("ldapauth", {
+    successRedirect: "/myaccount",
+    failureRedirect: "/login/ldap",
+    failureMessage: true,
+  })
 );
 
 router.get("/logout", function (req, res, next) {

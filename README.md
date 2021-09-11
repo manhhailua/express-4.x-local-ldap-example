@@ -8,7 +8,7 @@ To get started with this example, clone the repository and install the
 dependencies.
 
 ```bash
-$ git clone https://github.com/passport/express-4.x-local-example.git
+$ git clone https://github.com/passport/express-4.x-ldap-example.git
 $ cd express-4.x-local-example
 $ npm install
 ```
@@ -17,6 +17,12 @@ Start the server.
 
 ```bash
 $ npm start
+```
+
+or watch mode:
+
+```bash
+$ npm start:watch
 ```
 
 Navigate to [`http://localhost:3000`](http://localhost:3000).

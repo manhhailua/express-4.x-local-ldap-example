@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
-    <title>Log in example | Passport.js</title>
+    <title>Log in via LDAP | Passport.js</title>
     <meta name="description" content="Express 4.x app using Passport for authentication with username and password.">
 
     <!-- Pico.css -->
@@ -43,12 +43,13 @@
             <hgroup>
                 <h1>Sign in</h1>
             </hgroup>
-            <form action="/login/password" method="post">
+            <form action="/login/ldap" method="post">
                 <input type="text" name="username" placeholder="Username">
                 <input type="password" name="password" placeholder="Password">
-                <button type="submit" class="contrast">Sign in</button>
+                <button type="submit" class="contrast">Sign in via LDAP</button>
+
                 <div>
-                    <a href="/login/ldap">or sign in via LDAP</a>
+                    <a href="/login">or sign in</a>
                 </div>
             </form>
         </div>
