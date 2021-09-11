@@ -70,7 +70,7 @@ module.exports = function () {
           url: "ldap://localhost:389",
           bindDN: "cn=admin,dc=example,dc=org",
           bindCredentials: "admin",
-          searchBase: "ou=software,dc=example,dc=org",
+          searchBase: "dc=example,dc=org",
           searchFilter: "(uid={{username}})",
         },
       },
