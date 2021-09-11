@@ -12,6 +12,8 @@ $ cd express-4.x-local-example
 $ npm install
 ```
 
+Unzip [slapd.zip](./slapd.zip) to `slapd`. This folder will be mounted to `openldap` service.
+
 Compose pseudo LDAP services:
 
 ```shell
@@ -36,6 +38,14 @@ $ npm start:watch
 ```
 
 Navigate to [`http://localhost:3000`](http://localhost:3000).
+
+User accounts to login:
+
+| username | password |
+| --- | --- |
+| anlg | 123456 |
+| anhntv | 123456 |
+| manhpt | 123456 |
 
 ## Overview
 
